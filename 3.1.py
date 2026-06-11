@@ -5,7 +5,7 @@ girl_age = int(input("girl age: "))
 
 
 
-age_diff = boy_age - girl_age
+age_diff = abs(boy_age - girl_age)
 
 print("boy = " + boy_name)
 print("girl = " + girl_name)
