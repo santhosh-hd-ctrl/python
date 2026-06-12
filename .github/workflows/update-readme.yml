@@ -1,1 +1,37 @@
 
+name: Auto-Update README
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*.py'
+      - '.github/workflows/update-readme.yml'
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Generate README
+        run: python scripts/generate_readme.py
+      
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add README.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "docs: auto-update README from Python files"
+            git push
+          fi
